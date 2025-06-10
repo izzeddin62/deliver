@@ -8,6 +8,7 @@ import {
 import { defaultConfig } from "@tamagui/config/v4";
 import { TamaguiProvider, createTamagui } from "@tamagui/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -24,6 +25,10 @@ declare module "@tamagui/core" {
   interface TamaguiCustomConfig extends Conf {}
 }
 
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
+  unsavedChangesWarning: false,
+});
+
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },
 });
@@ -39,29 +44,31 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TamaguiProvider config={config}>
-        <GluestackUIProvider mode="light">
-          <ThemeProvider
-            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <Stack>
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="login"
-                options={{ headerShown: false }}
-              ></Stack.Screen>
-              <Stack.Screen
-                name="signup"
-                options={{ headerShown: false }}
-              ></Stack.Screen>
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="user" options={{ headerShown: false }} />
-            </Stack>
-            <StatusBar style="auto" />
-          </ThemeProvider>
-        </GluestackUIProvider>
-      </TamaguiProvider>
-    </QueryClientProvider>
+    <ConvexProvider client={convex}>
+      <QueryClientProvider client={queryClient}>
+        <TamaguiProvider config={config}>
+          <GluestackUIProvider mode="light">
+            <ThemeProvider
+              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+            >
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="login"
+                  options={{ headerShown: false }}
+                ></Stack.Screen>
+                <Stack.Screen
+                  name="signup"
+                  options={{ headerShown: false }}
+                ></Stack.Screen>
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen name="user" options={{ headerShown: false }} />
+              </Stack>
+              <StatusBar style="auto" />
+            </ThemeProvider>
+          </GluestackUIProvider>
+        </TamaguiProvider>
+      </QueryClientProvider>
+    </ConvexProvider>
   );
 }

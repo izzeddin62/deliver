@@ -4,6 +4,8 @@ import { Box } from "@/components/ui/box";
 import { Link, LinkText } from "@/components/ui/link";
 // import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 import { useRouter } from "expo-router";
 import { MoveLeft } from "lucide-react-native";
 import { Pressable, ScrollView } from "react-native";
@@ -11,7 +13,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, H4, Input, Label } from "tamagui";
 
 export default function Index() {
+  const users = useQuery(api.users.get);
   const router = useRouter();
+  console.log(users, '========');
   return (
     <SafeAreaView>
       <ScrollView className="bg-background-light px-4">
