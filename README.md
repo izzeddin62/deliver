@@ -1,5 +1,7 @@
 # Welcome to Deliver
 
+This is the github [repository](https://github.com/izzeddin62/deliver) for the project
+
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
