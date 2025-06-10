@@ -1,4 +1,4 @@
-# Welcome to your Expo app 👋
+# Welcome to Deliver
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -9,8 +9,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npm install
    ```
+2. Copy .env.example into .env
 
-2. Start the app
+3. Add the real .env values
+
+4. Start the app
 
    ```bash
    npx expo start

@@ -17,10 +17,11 @@ export interface ComputeRoutesRequest {
   routingPreference?: "TRAFFIC_AWARE" | "UNRESTRICTED";
   polylineQuality?: "HIGH_QUALITY" | "OVERVIEW";
   polylineEncoding?: "ENCODED_POLYLINE";
+  intermediates?: Waypoint[]
   // add more fields (departureTime, intermediates, etc.) as needed
 }
 export interface Route {
-  duration: { text: string; seconds: number };
+  duration: string;
   distanceMeters: number;
   polyline: { encodedPolyline: string };
 }

@@ -81,7 +81,7 @@ const drawerBackdropStyle = tva({
 });
 
 const drawerContentStyle = tva({
-  base: 'bg-background-0 overflow-scroll border-outline-100 p-6 absolute',
+  base: 'bg-background-0 overflow-scroll border-outline-100 p-3 absolute',
   parentVariants: {
     size: {
       sm: 'w-1/4',
@@ -125,7 +125,7 @@ const drawerContentStyle = tva({
     {
       anchor: 'bottom',
       size: 'md',
-      class: 'h-1/3',
+      class: 'h-2/5',
     },
     {
       anchor: 'bottom',

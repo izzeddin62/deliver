@@ -1,73 +1,69 @@
 import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
-import { Input, InputField } from "@/components/ui/input";
-import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useRouter } from "expo-router";
 import { MoveLeft } from "lucide-react-native";
-import { Pressable, ScrollView } from "react-native";
+import { Pressable, SafeAreaView, ScrollView } from "react-native";
+import { Button, H4, Input, Label, Text } from "tamagui";
 
 export default function Rider() {
   const router = useRouter();
   return (
-    <ScrollView className="bg-background-light px-4">
-      <VStack>
-        <Pressable
-          className="w-12 h-12 rounded-full bg-background-100 items-center justify-center mt-4"
-          onPress={() => router.back()}
-        >
-          <MoveLeft size={20} color={"black"} />
-        </Pressable>
-        <Box className="my-8">
-          <Heading size="2xl">Sign up to Deliver</Heading>
-          <Text>Sign up and get access to our delivery network</Text>
-        </Box>
+    <SafeAreaView>
+      <ScrollView className="bg-background-light px-4">
+        <VStack>
+          <Pressable
+            className="w-12 h-12 rounded-full bg-background-100 items-center justify-center mt-4"
+            onPress={() => router.back()}
+          >
+            <MoveLeft size={20} color={"black"} />
+          </Pressable>
+          <Box className="mt-8 mb-5">
+            <H4>Sign up to Deliver</H4>
+            <Text color={"$accent1"}>
+              Sign up and get access to our delivery network
+            </Text>
+          </Box>
 
-        <Box className="gap-4">
-          <Box>
-            <Text className="mb-1">First name</Text>
-            <Input size="lg">
-              <InputField>e.g: John</InputField>
-            </Input>
+          <Box className="gap-2">
+            <Box>
+              <Label marginBlockEnd={-6}>First name</Label>
+              <Input placeholder="e.g: John"></Input>
+            </Box>
+            <Box>
+              <Label marginBlockEnd={-6}>last name</Label>
+              <Input placeholder="e.g: Ishimwe"></Input>
+            </Box>
+            <Box>
+              <Label marginBlockEnd={-6}>Bike licence number</Label>
+              <Input placeholder="e.g: RAC 456"></Input>
+            </Box>
+            <Box>
+              <Label marginBlockEnd={-6}>Drive licence</Label>
+              <Input placeholder="e.g: 1198080043026249"></Input>
+            </Box>
+            <Box>
+              <Label marginBlockEnd={-6}>Phone number</Label>
+              <Input placeholder="Your Number"></Input>
+              <Text color={"$accent10"} marginBlockStart={2}>
+                A confirmation message will be sent on your phone
+              </Text>
+            </Box>
+            <Box>
+              <Label marginBlockEnd={-6}>Password</Label>
+              <Input placeholder="Your Password"></Input>
+            </Box>
           </Box>
-          <Box>
-            <Text className="mb-1">last name</Text>
-            <Input size="lg">
-              <InputField>e.g: Ishimwe</InputField>
-            </Input>
-          </Box>
-          <Box>
-            <Text className="mb-1">Bike licence number</Text>
-            <Input size="lg">
-              <InputField>e.g: RAC 456</InputField>
-            </Input>
-          </Box>
-          <Box>
-            <Text className="mb-1">Drive licence</Text>
-            <Input size="lg">
-              <InputField>e.g: 1198080043026249</InputField>
-            </Input>
-          </Box>
-          <Box>
-            <Text className="mb-2">Phone number</Text>
-            <Input size="lg">
-              <InputField>Your Number</InputField>
-            </Input>
-            <Text>A confirmation message will be sent on your phone</Text>
-          </Box>
-          <Box>
-            <Text className="mb-1">Password</Text>
-            <Input size="lg">
-              <InputField>Your Password</InputField>
-            </Input>
-          </Box>
-        </Box>
 
-        <Button className="my-4">
-          <ButtonText>Signup</ButtonText>
-        </Button>
-      </VStack>
-    </ScrollView>
+          <Button
+            className="my-4"
+            marginBlock={16}
+            onPress={() => router.navigate("/rider")}
+            theme="black"
+          >
+            Signup
+          </Button>
+        </VStack>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

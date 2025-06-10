@@ -4,31 +4,61 @@ import { autocompletePlacesQueries } from "@/services/autocomplete.places.servic
 import { AddressData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import {
-    Check,
-    ChevronLeft,
-    LocationEditIcon,
-    MapPin
+  Check,
+  ChevronLeft,
+  Loader,
+  LocationEditIcon,
+  MapPin,
 } from "lucide-react-native";
-import { Fragment, useEffect, useState } from "react";
-import { FlatList, Modal, Pressable, View } from "react-native";
+import { Fragment, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Easing,
+  FlatList,
+  Modal,
+  Pressable,
+  View,
+} from "react-native";
+import { Text } from "tamagui";
 import { UPInputProps, UPInputSearch } from "./UPInput";
 import { UPLoading } from "./UPLoader";
 import UPText from "./UPText";
 import { Box } from "./ui/box";
-import { Text } from "./ui/text";
 
 type UPInputLocationProps = UPInputProps & {
   onValueChange: (value: AddressData) => void;
+  isLoading: boolean;
 };
 export function SearchLocation({
   label,
   error,
   className,
+  isLoading,
   onValueChange,
   ...props
 }: UPInputLocationProps) {
   const [modelVisible, setModelVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("");
+  const spinAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const spin = Animated.loop(
+      Animated.timing(spinAnim, {
+        toValue: 1,
+        duration: 1000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    );
+    spin.start();
+
+    return () => spin.stop(); // Optional cleanup
+  }, [spinAnim]);
+
+  const rotate = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
   return (
     <Fragment>
       <Pressable
@@ -37,11 +67,20 @@ export function SearchLocation({
         }}
         className="w-full"
       >
-        <Box className="bg-background-light w-full h-10 rounded border border-background-400 flex-row items-center gap-2">
-          <Box className="justify-center items-center w-10 border-r h-full border-primary-50">
-            <LocationEditIcon color={"#808080"} size={18} />
+        <Box className="bg-background-light w-full h-12 border border-background-400 flex-row items-center gap-2 rounded-md">
+          <Box className="justify-center items-center w-12 border-r h-full border-[#cfcfcf]">
+            {isLoading ? (
+              <Animated.View style={{ transform: [{ rotate }] }}>
+                <Loader className="animate-spin" color={"#808080"} size={18} />
+              </Animated.View>
+            ) : (
+              <LocationEditIcon color={"#808080"} size={18} />
+            )}
           </Box>
-          <Text size="sm"> {!selectedValue ? "your package destination" : selectedValue} </Text>
+          <Text color={"$accent10"}>
+            {" "}
+            {!selectedValue ? "your package destination" : selectedValue}{" "}
+          </Text>
         </Box>
       </Pressable>
 

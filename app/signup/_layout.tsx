@@ -9,6 +9,7 @@ export default function TabLayout() {
         options={{
           title: 'User',
           tabBarIcon: ({ color }) => <User size={28} color={color} />,
+          headerShown: false
         }}
       />
       <Tabs.Screen
@@ -16,6 +17,7 @@ export default function TabLayout() {
         options={{
           title: 'Riders',
           tabBarIcon: ({ color }) =>  <Bike color={color} size={28} />,
+          headerShown: false
         }}
       />
     </Tabs>
