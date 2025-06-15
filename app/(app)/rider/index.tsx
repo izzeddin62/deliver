@@ -1,24 +1,25 @@
 import dayjs from "dayjs";
-import React, { Fragment, useEffect, useState } from "react";
-import { Alert, SafeAreaView, StyleSheet } from "react-native";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
 
 import { Box } from "@/components/ui/box";
 import {
-    Drawer,
-    DrawerBody,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
 } from "@/components/ui/drawer";
 import { useComputeRoutes } from "@/hooks/useComputedRoute";
 import polyline from "@mapbox/polyline";
 import duration from "dayjs/plugin/duration";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
 import {
-    BadgePercent,
-    HouseIcon,
-    LocationEdit,
-    Phone,
+  BadgePercent,
+  HouseIcon,
+  LocationEdit,
+  Phone,
 } from "lucide-react-native";
 import MapView, { LatLng, Marker, Polyline, Region } from "react-native-maps";
 import { Button, H6, Paragraph } from "tamagui";
@@ -55,6 +56,8 @@ export default function UserMapScreen() {
   const [initialRegion, setInitialRegion] = useState<Region | null>(null);
   const [currentMarker, setCurrentMarker] = useState<LatLng | null>(null);
   const [state, setState] = useState("default");
+  const [permission, requestPermission] = useCameraPermissions();
+  const ref = useRef<CameraView>(null);
 
   // ——— EFFECT TO REQUEST LOCATION PERMISSION + GET CURRENT POSITION ———
   useEffect(() => {
@@ -92,54 +95,59 @@ export default function UserMapScreen() {
         .map(([lat, lng]) => ({ latitude: lat, longitude: lng }))
     : null;
 
-
+  async function handoverPackage() {
+    await requestPermission();
+    await ref.current?.takePictureAsync()
+    alert("package handoff complete, please wait for the owner to confirm");
+  }
 
   return (
-    <SafeAreaView className="flex-1">
+    <Fragment>
+      <Box>
+        <CameraView ref={ref} mode="picture"></CameraView>
+      </Box>
+
       <Box className="flex-1">
-        <Box className="flex-1">
-          {initialRegion && (
-            <MapView
-              style={StyleSheet.absoluteFillObject}
-              initialRegion={initialRegion}
-              showsUserLocation={true}
-              loadingEnabled
-              region={region ?? initialRegion}
-              onRegionChangeComplete={(newRegion) => {
-                if (isInsideKigali(newRegion.latitude, newRegion.longitude)) {
-                  setRegion(newRegion);
-                } else {
-                  Alert.alert(
-                    "Outside Kigali",
-                    "Please stay within the Kigali area."
-                  );
-                  setRegion(initialRegion); // Reset to center
-                }
-              }}
-            >
-              {destinationCood && (
-                <Marker coordinate={destinationCood} title="Destination" />
-              )}
+        {initialRegion && (
+          <MapView
+            style={StyleSheet.absoluteFillObject}
+            initialRegion={initialRegion}
+            showsUserLocation={true}
+            loadingEnabled
+            region={region ?? initialRegion}
+            onRegionChangeComplete={(newRegion) => {
+              if (isInsideKigali(newRegion.latitude, newRegion.longitude)) {
+                setRegion(newRegion);
+              } else {
+                Alert.alert(
+                  "Outside Kigali",
+                  "Please stay within the Kigali area."
+                );
+                setRegion(initialRegion); // Reset to center
+              }
+            }}
+          >
+            {destinationCood && (
+              <Marker coordinate={destinationCood} title="Destination" />
+            )}
 
-              {pickupCood && (
-                <Marker coordinate={pickupCood} title="Destination" />
-              )}
+            {pickupCood && (
+              <Marker coordinate={pickupCood} title="Destination" />
+            )}
 
-              {coords && (
-                <Polyline
-                  coordinates={coords}
-                  strokeColor="#0da6f2"
-                  strokeWidth={6}
-                />
-              )}
-            </MapView>
-          )}
-        </Box>
+            {coords && (
+              <Polyline
+                coordinates={coords}
+                strokeColor="#0da6f2"
+                strokeWidth={6}
+              />
+            )}
+          </MapView>
+        )}
 
         {/* ===== MAPVIEW ===== */}
 
         <Drawer isOpen={true} onClose={() => {}} anchor="bottom" size="md">
-          {/* <DrawerBackdrop /> */}
           <DrawerContent className="bg-background-50 rounded-t-2xl">
             <DrawerHeader>
               <H6 color={"$accent7"}>New Delivery</H6>
@@ -340,7 +348,7 @@ export default function UserMapScreen() {
                 </Button>
               )}
               {state === "delivering" && (
-                <Button theme={"black"} onPress={() => setState("delivering")}>
+                <Button theme={"black"} onPress={handoverPackage}>
                   Package handoff
                 </Button>
               )}
@@ -348,6 +356,6 @@ export default function UserMapScreen() {
           </DrawerContent>
         </Drawer>
       </Box>
-    </SafeAreaView>
+    </Fragment>
   );
 }

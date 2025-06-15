@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import React, { Fragment, useEffect, useState } from "react";
-import { Alert, Pressable, SafeAreaView, StyleSheet } from "react-native";
+import { Alert, Pressable, StyleSheet } from "react-native";
 
 import { SearchLocation } from "@/components/SearchLocation";
 import { Box } from "@/components/ui/box";
@@ -91,7 +91,11 @@ export default function UserMapScreen() {
       }
     : null;
 
-  const { data, isLoading } = useComputeRoutes(currentMarker, destination, null);
+  const { data, isLoading } = useComputeRoutes(
+    currentMarker,
+    destination,
+    null
+  );
   const coords = data?.routes?.[0]
     ? polyline
         .decode(data.routes[0].polyline.encodedPolyline)
@@ -106,11 +110,11 @@ export default function UserMapScreen() {
     ? formatDuration(parseInt(duration))
     : null;
   return (
-    <SafeAreaView className="flex-1">
+    <Fragment>
       <Box className="flex-1">
         {/* ===== SEARCH BAR AT THE TOP ===== */}
         {!["searching", "delivering"].includes(state) && (
-          <Box className="absolute top-0 h-24 left-0 right-0 z-10 bg-primary-500 justify-end px-3 pb-4">
+          <Box className="absolute top-0 h-20 left-0 right-0 z-10 bg-primary-500 justify-end px-3 pb-4">
             <SearchLocation
               isLoading={isLoading}
               onValueChange={(va) => {
@@ -123,7 +127,7 @@ export default function UserMapScreen() {
           </Box>
         )}
 
-        <Box className="flex-1">
+        <Box className="flex-1 h-40">
           {initialRegion && (
             <MapView
               style={StyleSheet.absoluteFillObject}
@@ -261,7 +265,7 @@ export default function UserMapScreen() {
                   <Box className="flex-row gap-2 items-center mt-2">
                     <Pressable onPress={() => setState("delivering")}>
                       <Box className="bg-[#E8EDF5] w-12 h-12 mb-2 rounded-md items-center justify-center">
-                        <Phone size={20}  />
+                        <Phone size={20} />
                       </Box>
                     </Pressable>
 
@@ -354,6 +358,6 @@ export default function UserMapScreen() {
           </DrawerContent>
         </Drawer>
       </Box>
-    </SafeAreaView>
+    </Fragment>
   );
 }

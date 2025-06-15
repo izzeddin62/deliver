@@ -13,6 +13,11 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as ResendOTP from "../ResendOTP.js";
+import type * as auth from "../auth.js";
+import type * as http from "../http.js";
+import type * as lib_mutations_user from "../lib/mutations/user.js";
+import type * as lib_queries_users from "../lib/queries/users.js";
 import type * as users from "../users.js";
 
 /**
@@ -24,6 +29,11 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  ResendOTP: typeof ResendOTP;
+  auth: typeof auth;
+  http: typeof http;
+  "lib/mutations/user": typeof lib_mutations_user;
+  "lib/queries/users": typeof lib_queries_users;
   users: typeof users;
 }>;
 export declare const api: FilterApi<
