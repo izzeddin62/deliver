@@ -36,8 +36,7 @@ export default function Index() {
   });
 
   async function submit(data: UserData) {
-   const response  = await signIn("resend-otp", data);
-   console.log(response, '======');
+   await signIn("resend-otp", data);
   }
 
   return (

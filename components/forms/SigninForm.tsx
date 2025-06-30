@@ -47,9 +47,8 @@ export default function SigninForm() {
   });
 
   async function submit(data: UserData) {
-    const response = await signIn("resend-otp", data);
+    await signIn("resend-otp", data);
     setState(data);
-    console.log(response);
   }
 
   async function submitCode(data: CodeData) {
@@ -70,7 +69,6 @@ export default function SigninForm() {
     <SafeAreaView>
       <ScrollView className="bg-background-light px-4">
         <VStack>
-
           <H4
             fontWeight={500}
             className="my-8"

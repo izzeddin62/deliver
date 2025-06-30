@@ -1,21 +1,62 @@
 import { UPLoading } from "@/components/UPLoader";
 import { api } from "@/convex/_generated/api";
-import { useAuthToken } from "@convex-dev/auth/react";
-import { useConvexAuth, useQuery } from "convex/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import * as Location from "expo-location";
 import { Redirect, Slot, usePathname } from "expo-router";
 import { Box } from "lucide-react-native";
+import { useEffect } from "react";
+import { Alert } from "react-native";
 
 export default function Root() {
-  
   const { isLoading, isAuthenticated } = useConvexAuth();
-  const token = useAuthToken();
-  console.log('isloading; ', isLoading, ", isAuthenticated: ", isAuthenticated, '============== the end of the query');
   const data = useQuery(api.lib.queries.users.currentUser);
   const pathname = usePathname();
-  console.log(data, '===== at least the token is there');
+  const updateRiderLocation = useMutation(
+    api.lib.mutations.user.updateRiderLocation
+  );
+
+  // ——— EFFECT TO REQUEST LOCATION PERMISSION + GET CURRENT POSITION ———
+  useEffect(() => {
+    const getLocationData = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission denied",
+          "Location permission is required to use this feature."
+        );
+        return;
+      }
+
+      if (isAuthenticated) {
+        const loc = await Location.getCurrentPositionAsync({});
+        const { longitude, latitude } = loc.coords;
+        await updateRiderLocation({
+          location: {
+            longitude,
+            latitude,
+          },
+        });
+      } else {
+        return;
+      }
+    };
+
+    getLocationData();
+    const intervalId = setInterval(async () => {
+      await getLocationData(); // Your geolocation logic
+    }, 100000);
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval on cleanup
+
+      updateRiderLocation({
+        location: null,
+      });
+    };
+  }, [isAuthenticated, updateRiderLocation]);
+
 
   if (!isLoading && !isAuthenticated) {
-    console.log("I am redirecting to login which I shouldn't");
     return <Redirect href={"/login"} />;
   }
   if (
@@ -27,8 +68,12 @@ export default function Root() {
     return <Redirect href={"/category"} />;
   }
 
-  if (data && data.user && data.user.type === "user" && !pathname.includes("/user")) {
-
+  if (
+    data &&
+    data.user &&
+    data.user.type === "user" &&
+    !pathname.includes("/user")
+  ) {
     return <Redirect href={"/user"} />;
   }
   if (

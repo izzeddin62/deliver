@@ -1,3 +1,4 @@
+import { KeyboardTypeOptions } from "react-native";
 import { Input, Text } from "tamagui";
 import { Box } from "./ui/box";
 
@@ -8,6 +9,8 @@ interface DInputProps {
   value?: string;
   helperText?: string;
   placeholder?: string;
+
+  keyboardType?: KeyboardTypeOptions
 }
 
 export default function DInput({
@@ -17,12 +20,15 @@ export default function DInput({
   error,
   helperText,
   placeholder,
+  keyboardType
+
 }: DInputProps) {
   return (
     <Box className="h-fit">
       <Input
         placeholder={placeholder}
         onBlur={onBlur}
+        keyboardType={keyboardType}
         onChangeText={(value) => onChange?.(value)}
         value={value}
       />

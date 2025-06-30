@@ -59,13 +59,32 @@ export default function Layout() {
                   My deliveries
                 </ListItem>
               </Button>
+              <Button
+                onPress={() => {
+                  router.replace("/user/qr-code");
+                  setShowDrawer(false);
+                }}
+              >
+                <ListItem hoverTheme icon={Bike} scaleIcon={1.5}>
+                  My QR code
+                </ListItem>
+              </Button>
+              <Button
+                onPress={() => {
+                  router.replace("/user/friends");
+                  setShowDrawer(false);
+                }}
+              >
+                <ListItem hoverTheme icon={Bike} scaleIcon={1.5}>
+                  My friends
+                </ListItem>
+              </Button>
             </Box>
           </DrawerBody>
           <DrawerFooter>
             <Button
               onPress={async (e) => {
                 e.preventDefault();
-                console.log("I clicked here");
                 await signOut();
                 setShowDrawer(false);
                 router.navigate("/");
@@ -132,6 +151,75 @@ export default function Layout() {
                 >
                   <ButtonText>
                     <Menu />
+                  </ButtonText>
+                </GButton>
+              </Box>
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="active"
+          options={{
+            headerStyle: { backgroundColor: "#333333" },
+            title: "",
+            headerRight: () => (
+              <Box>
+                <GButton
+                  variant="link"
+                  className="w-fit"
+                  onPress={() => setShowDrawer(true)}
+                >
+                  <ButtonText>
+                    <Menu color={"white"} />
+                  </ButtonText>
+                </GButton>
+              </Box>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="qr-code"
+          options={{
+            headerStyle: { backgroundColor: "#333333" },
+            headerTitle: () => (
+              <Text fontWeight={500} color={"white"}>
+                QR Code
+              </Text>
+            ),
+            headerRight: () => (
+              <Box>
+                <GButton
+                  variant="link"
+                  className="w-fit"
+                  onPress={() => setShowDrawer(true)}
+                >
+                  <ButtonText>
+                    <Menu color={"white"} />
+                  </ButtonText>
+                </GButton>
+              </Box>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="friends"
+          options={{
+            headerStyle: { backgroundColor: "#333333" },
+            headerTitle: () => (
+              <Text fontWeight={500} color={"white"}>
+                Friends
+              </Text>
+            ),
+            headerRight: () => (
+              <Box>
+                <GButton
+                  variant="link"
+                  className="w-fit"
+                  onPress={() => setShowDrawer(true)}
+                >
+                  <ButtonText>
+                    <Menu color={"white"} />
                   </ButtonText>
                 </GButton>
               </Box>

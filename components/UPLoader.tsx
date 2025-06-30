@@ -62,10 +62,10 @@ export function UPFullScreenLoader({
 }
 
 
-export function UPLoading(){
+export function UPLoading({ color = Colors.UP.primary }: { color?: string }) {
   return (
     <View>
-      <ActivityIndicator size="small" color={Colors.UP.primary} />
+      <ActivityIndicator size="small" color={color} />
     </View>
   );
 }

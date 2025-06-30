@@ -75,7 +75,6 @@ export default function Layout() {
             <Button
               onPress={async (e) => {
                 e.preventDefault();
-                console.log("I clicked here");
                 await signOut();
                 setShowDrawer(false);
                 router.navigate("/");

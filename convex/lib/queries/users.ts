@@ -1,6 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { v } from "convex/values";
 import { Doc } from "../../_generated/dataModel";
-import { query } from "../../_generated/server";
+import { internalQuery, query } from "../../_generated/server";
 
 type Profile = Doc<"profiles">;
 // get current user;
@@ -20,5 +21,14 @@ export const currentUser = query({
       user,
       profile,
     };
+  },
+});
+
+export const user = internalQuery({
+  args: {
+    userId: v.id("users"),
+  },
+  handler(ctx, { userId }) {
+    return ctx.db.get(userId);
   },
 });

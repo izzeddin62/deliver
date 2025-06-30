@@ -3,25 +3,19 @@ import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
 import { UPLoading } from "@/components/UPLoader";
 import { api } from "@/convex/_generated/api";
-import {
-  useConvexAuth,
-  useQuery
-} from "convex/react";
+import { useQuery } from "convex/react";
 import { Redirect, useRouter } from "expo-router";
 import { Button } from "tamagui";
 
 export default function Index() {
   const router = useRouter();
   const data = useQuery(api.lib.queries.users.currentUser);
-  const { isAuthenticated } = useConvexAuth()
-  console.log("isauth true: ", isAuthenticated, '=====================', data)
-
   if (data && data.user && data.user.type === undefined) {
     return <Redirect href={"/category"} />;
   }
 
   if (data && data.user && data.user.type === "user") {
-    return <Redirect href={"/user/deliveries"} />;
+    return <Redirect href={"/user"} />;
   }
 
   if (data && data.user && data.user.type === "rider" && data.profile) {

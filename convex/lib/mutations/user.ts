@@ -43,3 +43,56 @@ export const updateUserType = mutation({
     }
   },
 });
+
+
+export const updateRiderLocation = mutation({
+  args: {
+    location: v.union(
+      v.object({
+        latitude: v.number(),
+        longitude: v.number(),
+      }),
+      v.null()
+    ),
+  },
+  async handler(ctx, { location }) {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
+    const user = await ctx.db.get(userId);
+    if (!user) return null;
+    await ctx.db.patch(userId, {
+      location: location ?? undefined,
+    });
+    return {
+      success: true,
+    };
+  },
+});
+
+
+export const startDelivery = mutation({
+  args: {
+    deliveryId: v.id("deliveryRequests"),
+  },
+  async handler(ctx, { deliveryId }) {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
+
+    const deliveryRequest = await ctx.db.get(deliveryId);
+    if (!deliveryRequest) {
+      throw new Error("Delivery request not found");
+    }
+
+    if (deliveryRequest.riderId !== userId) {
+      throw new Error("Unauthorized to start this delivery");
+    }
+
+    await ctx.db.patch(deliveryId, {
+      status: "delivering",
+    });
+
+    return {
+      success: true,
+    };
+  }
+});

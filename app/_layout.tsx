@@ -17,6 +17,7 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { ConvexQueryClient } from "@convex-dev/react-query";
 import { Platform } from "react-native";
 
 const config = createTamagui(defaultConfig);
@@ -31,7 +32,7 @@ declare module "@tamagui/core" {
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
   unsavedChangesWarning: false,
 });
-
+const convexQueryClient = new ConvexQueryClient(convex);
 const secureStorage = {
   getItem: SecureStore.getItemAsync,
   setItem: SecureStore.setItemAsync,
@@ -39,7 +40,13 @@ const secureStorage = {
 };
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 2 } },
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      queryKeyHashFn: convexQueryClient.hashFn(),
+      queryFn: convexQueryClient.queryFn(),
+    },
+  },
 });
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -79,7 +86,7 @@ export default function RootLayout() {
                 ></Stack.Screen>
                 <Stack.Screen name="+not-found" />
               </Stack>
-              <StatusBar style="auto" />
+              <StatusBar style="inverted" />
             </ThemeProvider>
           </GluestackUIProvider>
         </TamaguiProvider>
