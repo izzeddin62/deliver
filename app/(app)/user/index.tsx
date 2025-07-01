@@ -171,7 +171,7 @@ export default function UserMapScreen() {
     <Fragment>
       <Box className="flex-1">
         {/* ===== SEARCH BAR AT THE TOP ===== */}
-        <Box className="absolute top-0 h-20 left-0 right-0 z-10 bg-primary-500 items-center gap-2 px-3 pb-4 flex-row ">
+        <Box className="absolute top-2 h-20 left-0 right-0 z-10  items-center gap-2 px-3 pb-4 flex-row ">
           <Box className="flex-1">
             <SearchLocation
               isLoading={isLoading}
@@ -183,7 +183,7 @@ export default function UserMapScreen() {
               key={key}
             />
           </Box>
-          <Pressable onPress={() => setFriendDrawerOpen(!friendDrawerOpen)}>
+          <Pressable onPress={() => setFriendDrawerOpen(!friendDrawerOpen)} className="p-3 rounded-full shadow-md bg-background-800">
             <Contact size={24} color={"white"} />
           </Pressable>
         </Box>
@@ -352,7 +352,7 @@ export default function UserMapScreen() {
                 <Fragment>
                   <Button
                     onPress={() => {
-                      setDestination(null);
+                      // setDestination(null);
                       setKey(1);
                     }}
                   >

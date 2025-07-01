@@ -18,6 +18,13 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ConvexQueryClient } from "@convex-dev/react-query";
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_900Black,
+} from "@expo-google-fonts/inter";
 import { Platform } from "react-native";
 
 const config = createTamagui(defaultConfig);
@@ -53,8 +60,15 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_900Black,
+  })
 
-  if (!loaded) {
+  if (!loaded || !fontsLoaded) {
     // Async font loading only occurs in development.
     return null;
   }

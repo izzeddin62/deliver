@@ -1,6 +1,8 @@
 import { KeyboardTypeOptions } from "react-native";
-import { Input, Text } from "tamagui";
+
 import { Box } from "./ui/box";
+import { Input, InputField } from "./ui/input";
+import { Text } from "./ui/text";
 
 interface DInputProps {
   error?: string;
@@ -10,7 +12,7 @@ interface DInputProps {
   helperText?: string;
   placeholder?: string;
 
-  keyboardType?: KeyboardTypeOptions
+  keyboardType?: KeyboardTypeOptions;
 }
 
 export default function DInput({
@@ -20,23 +22,23 @@ export default function DInput({
   error,
   helperText,
   placeholder,
-  keyboardType
-
+  keyboardType,
 }: DInputProps) {
   return (
     <Box className="h-fit">
-      <Input
-        placeholder={placeholder}
-        onBlur={onBlur}
-        keyboardType={keyboardType}
-        onChangeText={(value) => onChange?.(value)}
-        value={value}
-      />
+      <Input variant="rounded" className="h-16 px-3">
+        <InputField
+          placeholder={placeholder}
+          onBlur={onBlur}
+          keyboardType={keyboardType}
+          onChangeText={(value) => onChange?.(value)}
+          value={value}
+          
+        />
+      </Input>
       {!!(helperText || error) && (
         <Box className="mt-2 ">
-          <Text color={error ? "$red9" : "$accent10"}>
-            {error ?? helperText}
-          </Text>
+          <Text>{error ?? helperText}</Text>
         </Box>
       )}
     </Box>

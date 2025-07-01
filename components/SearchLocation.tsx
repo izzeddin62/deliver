@@ -7,8 +7,8 @@ import {
   Check,
   ChevronLeft,
   Loader,
-  LocationEditIcon,
   MapPin,
+  Search
 } from "lucide-react-native";
 import { Fragment, useEffect, useRef, useState } from "react";
 import {
@@ -19,11 +19,11 @@ import {
   Pressable,
   View,
 } from "react-native";
-import { Text } from "tamagui";
 import { UPInputProps, UPInputSearch } from "./UPInput";
 import { UPLoading } from "./UPLoader";
 import UPText from "./UPText";
 import { Box } from "./ui/box";
+import { Text } from "./ui/text";
 
 type UPInputLocationProps = UPInputProps & {
   onValueChange: (value: AddressData) => void;
@@ -67,20 +67,20 @@ export function SearchLocation({
         }}
         className="w-full"
       >
-        <Box className="bg-background-light w-full h-12 border border-background-400 flex-row items-center gap-2 rounded-md">
-          <Box className="justify-center items-center w-12 border-r h-full border-[#cfcfcf]">
+        <Box className="bg-background-light w-full h-14 flex-row items-center justify-between gap-2 rounded-full pl-5 pr-1 shadow-lg">
+          <Text className="text-typography-700 font-body">
+            {" "}
+            {!selectedValue ? "Your package destination" : selectedValue}{" "}
+          </Text>
+          <Box className="justify-center items-center aspect-square h-12 w-12 rounded-full bg-primary-500">
             {isLoading ? (
               <Animated.View style={{ transform: [{ rotate }] }}>
-                <Loader className="animate-spin" color={"#808080"} size={18} />
+                <Loader color={"white"} size={18} />
               </Animated.View>
             ) : (
-              <LocationEditIcon color={"#808080"} size={18} />
+              <Search color={"white"} strokeWidth={3} size={18} />
             )}
           </Box>
-          <Text color={"$accent10"}>
-            {" "}
-            {!selectedValue ? "your package destination" : selectedValue}{" "}
-          </Text>
         </Box>
       </Pressable>
 

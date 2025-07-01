@@ -6,5 +6,10 @@
   "app": {
     "entry": "app/_layout.tsx",
     "components": "components/ui"
+  },
+  "fonts": {
+    "heading": "inter",
+    "body": "inter",
+    "mono": "monospace"
   }
 }

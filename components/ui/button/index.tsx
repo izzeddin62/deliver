@@ -1,15 +1,15 @@
 'use client';
-import React from 'react';
 import { createButton } from '@gluestack-ui/button';
+import { PrimitiveIcon, UIIcon } from '@gluestack-ui/icon';
+import type { VariantProps } from '@gluestack-ui/nativewind-utils';
 import { tva } from '@gluestack-ui/nativewind-utils/tva';
 import {
-  withStyleContext,
   useStyleContext,
+  withStyleContext,
 } from '@gluestack-ui/nativewind-utils/withStyleContext';
 import { cssInterop } from 'nativewind';
+import React from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
-import { PrimitiveIcon, UIIcon } from '@gluestack-ui/icon';
 
 const SCOPE = 'BUTTON';
 
@@ -37,7 +37,7 @@ cssInterop(PrimitiveIcon, {
 });
 
 const buttonStyle = tva({
-  base: 'group/button rounded bg-primary-500 flex-row items-center justify-center data-[focus-visible=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[disabled=true]:opacity-40 gap-2',
+  base: 'group/button rounded bg-primary-500 flex-row items-center justify-center data-[focus-visible=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[disabled=true]:opacity-40 gap-2 rounded-full',
   variants: {
     action: {
       primary:
@@ -63,7 +63,7 @@ const buttonStyle = tva({
       sm: 'px-4 h-9',
       md: 'px-5 h-10',
       lg: 'px-6 h-11',
-      xl: 'px-7 h-12',
+      xl: 'px-7 h-fit py-5',
     },
   },
   compoundVariants: [
@@ -427,4 +427,5 @@ ButtonSpinner.displayName = 'ButtonSpinner';
 ButtonIcon.displayName = 'ButtonIcon';
 ButtonGroup.displayName = 'ButtonGroup';
 
-export { Button, ButtonText, ButtonSpinner, ButtonIcon, ButtonGroup };
+export { Button, ButtonGroup, ButtonIcon, ButtonSpinner, ButtonText };
+
