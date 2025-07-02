@@ -62,7 +62,7 @@ export const friendLocationRequest = query({
       friend: friend
         ? {
             ...friend,
-            location: request?.status === "accepted" ? friend.location : null,
+            location: request?.status === "accepted" ? friend.location : undefined,
           }
         : null,
     };

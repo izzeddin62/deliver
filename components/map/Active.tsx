@@ -5,11 +5,11 @@ import { Alert, Pressable, StyleSheet } from "react-native";
 import PhoneModal from "@/components/modals/PhoneModal";
 import { Box } from "@/components/ui/box";
 import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
+    Drawer,
+    DrawerBody,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
 } from "@/components/ui/drawer";
 import { Image } from "@/components/ui/image";
 import { UPLoading } from "@/components/UPLoader";
@@ -22,12 +22,12 @@ import duration from "dayjs/plugin/duration";
 import * as Location from "expo-location";
 import { Redirect } from "expo-router";
 import {
-  BadgePercent,
-  Bike,
-  BikeIcon,
-  HouseIcon,
-  Phone,
-  Search,
+    BadgePercent,
+    Bike,
+    BikeIcon,
+    HouseIcon,
+    Phone,
+    Search,
 } from "lucide-react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { Button, H5, H6, Paragraph, Progress } from "tamagui";

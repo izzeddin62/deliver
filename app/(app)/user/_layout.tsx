@@ -157,27 +157,7 @@ export default function Layout() {
             ),
           }}
         />
-
-        <Stack.Screen
-          name="active"
-          options={{
-            headerStyle: { backgroundColor: "#333333" },
-            title: "",
-            headerRight: () => (
-              <Box>
-                <GButton
-                  variant="link"
-                  className="w-fit"
-                  onPress={() => setShowDrawer(true)}
-                >
-                  <ButtonText>
-                    <Menu color={"white"} />
-                  </ButtonText>
-                </GButton>
-              </Box>
-            ),
-          }}
-        />
+    
         <Stack.Screen
           name="qr-code"
           options={{

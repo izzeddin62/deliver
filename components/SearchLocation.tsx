@@ -54,6 +54,7 @@ export function SearchLocation({
 
     return () => spin.stop(); // Optional cleanup
   }, [spinAnim]);
+  
 
   const rotate = spinAnim.interpolate({
     inputRange: [0, 1],
@@ -122,11 +123,13 @@ function UPInputLocationModel({
     };
   }, [search]);
 
+
   const { data: places, isLoading: isLoadingPlaces } = useQuery(
     autocompletePlacesQueries.all({
       q: bounceName,
     })
   );
+
 
   return (
     <Modal visible={modelVisible} animationType="slide" transparent={true}>
@@ -169,16 +172,17 @@ function UPInputLocationModel({
           ) : (
             <View className="w-full">
               <FlatList
-                data={places}
+                data={places ?? []}
                 style={{
                   width: "100%",
                 }}
-                keyExtractor={(item) => item.place_id}
+                keyExtractor={(item, index) => item.place_id ?? index.toString()}
                 renderItem={({ item }) => (
                   <Pressable
                     onPress={() => {
                       setModelVisible(false);
-                      onChange?.(item);
+                      onChange?.({...item});
+
                     }}
                     className="px-4 w-full py-4 border-b border-border flex flex-row justify-between"
                   >
