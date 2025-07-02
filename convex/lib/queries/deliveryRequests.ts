@@ -35,11 +35,18 @@ export const ActiveDeliveryRequest = query({
       ? await ctx.db.get(latestRequest.riderId)
       : null;
 
+    const riderProfile = rider
+      ? await ctx.db
+          .query("profiles")
+          .withIndex("by_userId", (q) => q.eq("userId", rider._id)).first()
+      : null;
+
     return {
       deliveryRequest: latestRequest,
 
       imageUrl,
       rider: rider,
+      riderProfile,
     };
   },
 });

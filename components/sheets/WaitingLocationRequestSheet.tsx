@@ -46,30 +46,6 @@ const WaitingLocationRequestSheet = forwardRef<BottomSheet>((_, ref) => {
   );
 });
 
-// {
-//   sentLocationRequest && sentLocationRequest.status === "pending" && (
-//     <Box>
-//       <Paragraph fontWeight={500}>
-//         Waiting for friend to confirm location request
-//       </Paragraph>
-//       <Box className="flex-row gap-2 items-center mt-2 w-full">
-//         <Box className="bg-[#E8EDF5] w-12 h-12 mb-2 rounded-md items-center justify-center">
-//           <UPLoading />
-//         </Box>
-
-//         <Box className="-mt-2">
-//           <Paragraph>
-//             Please hold on, we&apos;re waiting for your friend
-//           </Paragraph>
-//           <Paragraph>to confirm their location.</Paragraph>
-//         </Box>
-//       </Box>
-//       <Paragraph color={"#075a83"} size={"$2"}>
-//         We will notify you once your friend confirms their location.
-//       </Paragraph>
-//     </Box>
-//   );
-// }
 
 WaitingLocationRequestSheet.displayName = "WaitingLocationRequestSheet";
 export default WaitingLocationRequestSheet;

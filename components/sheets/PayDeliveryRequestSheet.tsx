@@ -3,17 +3,15 @@ import React, { forwardRef, useCallback } from "react";
 import LocationCard from "@/components/LocationCard";
 import { Box } from "@/components/ui/box";
 import {
-    ButtonSpinner,
     ButtonText,
-    Button as GButton,
+    Button as GButton
 } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
+import { formatDuration } from "@/services/duration.services";
 import { formatDistance } from "@/utils/distance";
-import { useConvexMutation } from "@convex-dev/react-query";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useMutation } from "@tanstack/react-query";
 import {
     Clock,
     DollarSign,
@@ -21,64 +19,29 @@ import {
     LocationEdit,
     Ruler,
 } from "lucide-react-native";
+import PhoneModal from "../modals/PhoneModal";
 
-interface ConfirmDeliveryRequestSheetProps {
-  duration: string | null;
-  distance: number | null;
-  price: number | null;
+interface PayDeliveryRequestSheetProps {
+
   onClose?: () => void;
+  deliveryRequest: Doc<"deliveryRequests">;
 
-  pickup: string | null;
-  destination: string | null;
-  pickupAddress: {
-    latitude: number;
-    longitude: number;
-  } | null;
-  destinationAddress: {
-    latitude: number;
-    longitude: number;
-  } | null;
+
 }
 
 const PayDeliveryRequestSheet = forwardRef<
   BottomSheet,
-  ConfirmDeliveryRequestSheetProps
+  PayDeliveryRequestSheetProps
 >(
   (
     {
-      duration,
-      distance,
-      price,
-      pickup,
-      destination,
-      pickupAddress,
-
-      destinationAddress,
+      deliveryRequest,
       onClose,
     },
     ref
   ) => {
-    const { mutateAsync, isPending } = useMutation({
-      mutationFn: useConvexMutation(
-        api.lib.mutations.deliveryRequests.createDeliveryRequest
-      ),
-    });
 
-    const createNewDelivery = async () => {
-      await mutateAsync({
-        pickup: {
-          name: pickup ?? "Current Location",
-          latitude: pickupAddress?.latitude ?? 0,
-          longitude: pickupAddress?.longitude ?? 0,
-        },
-        destination: {
-          name: destination ?? "Destination",
-          latitude: destinationAddress?.latitude ?? 0,
-          longitude: destinationAddress?.longitude ?? 0,
-        },
-      });
-      // router.replace("/(app)/user/active");
-    };
+
 
     // callbacks
     const handleSheetChanges = useCallback((index: number) => {
@@ -102,12 +65,12 @@ const PayDeliveryRequestSheet = forwardRef<
             <Box className="gap-3 -ml-0.5">
               <LocationCard
                 title={"From"}
-                location={pickup}
+                location={deliveryRequest.pickup.name}
                 icon={<LocationEdit size={20} color={"#666666"} />}
               />
               <LocationCard
                 title={"To"}
-                location={destination}
+                location={deliveryRequest.destination.name}
                 icon={<Flag size={20} color={"#666666"} />}
               />
             </Box>
@@ -124,7 +87,7 @@ const PayDeliveryRequestSheet = forwardRef<
                   <Text className="text-base font-semibold">Distance</Text>
                 </Box>
                 <Text className="text-base font-semibold">
-                  {distance ? formatDistance(distance) : 0}
+                  {deliveryRequest.distanceMeters ? formatDistance(deliveryRequest.distanceMeters) : 0}
                 </Text>
               </Box>
               <Box className="bg-secondary-100 flex-row justify-between items-center p-3 rounded-lg">
@@ -134,7 +97,7 @@ const PayDeliveryRequestSheet = forwardRef<
                   </Box>
                   <Text className="text-base font-semibold">Time</Text>
                 </Box>
-                <Text className="text-base font-semibold">{duration}</Text>
+                <Text className="text-base font-semibold">{deliveryRequest.duration ? formatDuration(parseInt(deliveryRequest.duration)): 0}</Text>
               </Box>
             </Box>
           </Box>
@@ -148,7 +111,7 @@ const PayDeliveryRequestSheet = forwardRef<
                 </Box>
                 <Text className="text-base font-semibold">Delivery Price</Text>
               </Box>
-              <Text className="text-base font-semibold">{price}RWF</Text>
+              <Text className="text-base font-semibold">{deliveryRequest.price}RWF</Text>
             </Box>
           </Box>
 
@@ -166,10 +129,8 @@ const PayDeliveryRequestSheet = forwardRef<
             >
               <ButtonText>Cancel</ButtonText>
             </GButton>
-            <GButton size="xl" className="flex-1" onPress={createNewDelivery}>
-              {isPending && <ButtonSpinner />}
-              <ButtonText className="ml-2">{isPending ? "Paying" : "Pay"}</ButtonText>
-            </GButton>
+ 
+            <PhoneModal deliveryId={deliveryRequest._id} />
           </Box>
         </BottomSheetView>
       </BottomSheet>
@@ -177,6 +138,6 @@ const PayDeliveryRequestSheet = forwardRef<
   }
 );
 
-PayDeliveryRequestSheet.displayName = "ConfirmDeliveryRequestSheet";
+PayDeliveryRequestSheet.displayName = "PayDeliveryRequestSheet";
 
 export default PayDeliveryRequestSheet;

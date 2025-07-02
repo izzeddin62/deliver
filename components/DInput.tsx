@@ -38,7 +38,7 @@ export default function DInput({
       </Input>
       {!!(helperText || error) && (
         <Box className="mt-2 ">
-          <Text>{error ?? helperText}</Text>
+          <Text className={`${error ? "text-error-500": "text-primary-700"}`}>{error ?? helperText}</Text>
         </Box>
       )}
     </Box>
