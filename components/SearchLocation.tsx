@@ -8,7 +8,7 @@ import {
   ChevronLeft,
   Loader,
   MapPin,
-  Search
+  Search,
 } from "lucide-react-native";
 import { Fragment, useEffect, useRef, useState } from "react";
 import {
@@ -23,6 +23,7 @@ import { UPInputProps, UPInputSearch } from "./UPInput";
 import { UPLoading } from "./UPLoader";
 import UPText from "./UPText";
 import { Box } from "./ui/box";
+import { Input, InputField } from "./ui/input";
 import { Text } from "./ui/text";
 
 type UPInputLocationProps = UPInputProps & {
@@ -54,7 +55,6 @@ export function SearchLocation({
 
     return () => spin.stop(); // Optional cleanup
   }, [spinAnim]);
-  
 
   const rotate = spinAnim.interpolate({
     inputRange: [0, 1],
@@ -123,13 +123,11 @@ function UPInputLocationModel({
     };
   }, [search]);
 
-
   const { data: places, isLoading: isLoadingPlaces } = useQuery(
     autocompletePlacesQueries.all({
       q: bounceName,
     })
   );
-
 
   return (
     <Modal visible={modelVisible} animationType="slide" transparent={true}>
@@ -165,6 +163,13 @@ function UPInputLocationModel({
             className="mt-2"
             autoFocus
           />
+          <Box className="relative bg-background-50 pt-6 rounded-sm pb-1">
+            <Text className="absolute top-2 left-2.5 text-sm font-semibold text-typography-400 border-0">To</Text>
+            <Input className="bg-transparent relative border-0">
+              <InputField placeholder="Destination" />
+            </Input>
+          </Box>
+
           {isLoadingPlaces ? (
             <View className="mt-4">
               <UPLoading />
@@ -176,13 +181,14 @@ function UPInputLocationModel({
                 style={{
                   width: "100%",
                 }}
-                keyExtractor={(item, index) => item.place_id ?? index.toString()}
+                keyExtractor={(item, index) =>
+                  item.place_id ?? index.toString()
+                }
                 renderItem={({ item }) => (
                   <Pressable
                     onPress={() => {
                       setModelVisible(false);
-                      onChange?.({...item});
-
+                      onChange?.({ ...item });
                     }}
                     className="px-4 w-full py-4 border-b border-border flex flex-row justify-between"
                   >

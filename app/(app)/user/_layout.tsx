@@ -7,6 +7,16 @@ export default function Layout() {
     <Tabs className="rounded-t-[20px]">
       <TabSlot />
       <TabList className="bg-background-0 h-24 justify-normal items-center">
+        <TabTrigger
+          name="profile"
+          href={"/(app)/user/qr-code"}
+          className="hidden"
+        ></TabTrigger>
+        <TabTrigger
+          name="profile"
+          href={"/(app)/user/scanner"}
+          className="hidden"
+        ></TabTrigger>
         <TabTrigger name="home" href="/" asChild>
           <TabButton text="Home" Icon={House} />
         </TabTrigger>
@@ -19,17 +29,6 @@ export default function Layout() {
         <TabTrigger name="profile" href={"/(app)/user/profile"} asChild>
           <TabButton text="Profile" Icon={User} />
         </TabTrigger>
-
-        <TabTrigger
-          name="profile"
-          href={"/(app)/user/qr-code"}
-          className="hidden"
-        ></TabTrigger>
-        <TabTrigger
-          name="profile"
-          href={"/(app)/user/scanner"}
-          className="hidden"
-        ></TabTrigger>
       </TabList>
     </Tabs>
   );
