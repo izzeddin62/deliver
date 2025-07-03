@@ -1,109 +1,131 @@
 import { Box } from "@/components/ui/box";
-import { useRouter } from "expo-router";
+import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
+import { UPLoading } from "@/components/UPLoader";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
+import dayjs from "dayjs";
+import { Redirect, useRouter } from "expo-router";
+import { Package } from "lucide-react-native";
 import { Pressable, SafeAreaView, ScrollView } from "react-native";
-import { H6, Paragraph, Progress } from "tamagui";
 
 export default function Deliveries() {
   const router = useRouter();
+  const activeData = useQuery(
+    api.lib.queries.deliveryRequests.ActiveDeliveryRequest
+  );
+  const deliveriesData = useQuery(
+    api.lib.queries.deliveryRequests.latestDeliveryRequests
+  );
+  if (activeData === null || deliveriesData === null) {
+    return <Redirect href={"/login"} />;
+  }
+
+  if (!activeData || !deliveriesData) {
+    return (
+      <Box className="flex-1 justify-center items-center">
+        <UPLoading />
+      </Box>
+    );
+  }
+
+  const groupedDeliveryRequest = deliveriesData.groupRequests;
+
+  const groupedDates = Object.keys(groupedDeliveryRequest);
+  const deliveryRequest = activeData.deliveryRequest;
+
   return (
-    <SafeAreaView>
-      <ScrollView className="bg-white min-h-screen-safe h-full">
-        <Box className="px-5 flex-1  mt-10">
-          <Pressable onPress={() => router.navigate("/(app)/user")}>
-            <Box className="flex-row items-center justify-between">
-              <Box>
-                <Paragraph size={"$5"} fontWeight={500}>
-                  Delivery in Progress
-                </Paragraph>
-                <Paragraph>70% Complete</Paragraph>
-              </Box>
-              <Box className="flex-row gap-2 items-center">
-                <Progress value={70} size={"$0.75"} width={80}>
-                  <Progress.Indicator animation="bouncy" />
-                </Progress>
-                <Paragraph>70</Paragraph>
-              </Box>
-            </Box>
-          </Pressable>
+    <SafeAreaView className="flex-1 bg-background-0">
+      <ScrollView
+        className="bg-background-100  flex-1"
+        contentContainerClassName="flex-1"
+      >
+        <Box className="w-full px-5 bg-background-0 py-6">
+          <Heading size="xl">My Deliveries</Heading>
+        </Box>
 
-          <H6 fontWeight={500} marginBlock={20}>
-            Recent
-          </H6>
+        <Box className="py-1"></Box>
+        <Box className="px-5 bg-background-0 flex-1 pt-4">
+          {deliveryRequest && (
+            <Box className="gap-2">
+              <Heading className="text-typography-500 text-sm font-medium">
+                Active
+              </Heading>
+              <Pressable
+                onPress={() => router.navigate("/(app)/user")}
+                className="relative -left-1"
+              >
+                <Box className="flex-row items-center justify-between">
+                  <Box className="flex-row items-center gap-4">
+                    <Box className="bg-secondary-200 p-3 rounded-full">
+                      <Package strokeWidth={1} />
+                    </Box>
+                    <Box>
+                      <Heading className="text-sm font-medium">
+                        {deliveryRequest.pickup.name}
+                      </Heading>
+                      <Text className="text-sm text-typography-600">
+                        {deliveryRequest.destination.name}
+                      </Text>
+                    </Box>
+                  </Box>
 
-          <Box className="gap-4">
-            <Pressable onPress={() => router.navigate("/(app)/user/delivery")}>
-              <Box className="flex-row items-center justify-between">
-                <Box>
-                  <Paragraph size={"$5"} fontWeight={500}>
-                    KG 245 St
-                  </Paragraph>
-                  <Paragraph>Pickup: Amohoro Stadium</Paragraph>
+                  <Box className="flex-row gap-2 items-center">
+                    <Text className="font-semibold">
+                      {deliveryRequest.price}RWF
+                    </Text>
+                  </Box>
                 </Box>
-                <Box className="">
-                  <Paragraph color={"$red10"}>Cancelled</Paragraph>
+              </Pressable>
+            </Box>
+          )}
+
+          <Box className="gap-6 mt-8">
+            {groupedDates.map((date) => {
+              const newDate = dayjs(date);
+              const formatedDate = newDate.format("dddd, MMMM D, YYYY");
+              const deliveries = groupedDeliveryRequest[date];
+              return (
+                <Box key={date}>
+                  <Heading className="text-typography-500 text-sm font-medium mb-3">
+                    {formatedDate}
+                  </Heading>
+                  <Box className="gap-5">
+                    {deliveries.map((delivery) => {
+                      return (
+                        <Pressable
+                          key={delivery._id}
+                          onPress={() => router.navigate("/(app)/user")}
+                          className="relative -left-1"
+                        >
+                          <Box className="flex-row items-center justify-between">
+                            <Box className="flex-row items-center gap-4">
+                              <Box className="bg-secondary-200 p-3 rounded-full">
+                                <Package strokeWidth={1} />
+                              </Box>
+                              <Box className="gap-[2px]">
+                                <Heading className="text-sm font-medium">
+                                  {delivery.pickup.name}
+                                </Heading>
+                                <Text className="text-sm text-typography-600">
+                                  {delivery.destination.name}
+                                </Text>
+                              </Box>
+                            </Box>
+
+                            <Box className="flex-row gap-2 items-center">
+                              <Text className="font-semibold">
+                                {delivery.price}RWF
+                              </Text>
+                            </Box>
+                          </Box>
+                        </Pressable>
+                      );
+                    })}
+                  </Box>
                 </Box>
-              </Box>
-            </Pressable>
-
-            <Box className="flex-row items-center justify-between">
-              <Box>
-                <Paragraph size={"$5"} fontWeight={500}>
-                  Kimironko Market
-                </Paragraph>
-                <Paragraph>Pickup: Canalolympian</Paragraph>
-              </Box>
-              <Box className="">
-                <Paragraph color={"$green10"}>Completed</Paragraph>
-              </Box>
-            </Box>
-
-            <Box className="flex-row items-center justify-between">
-              <Box>
-                <Paragraph size={"$5"} fontWeight={500}>
-                  Makuza Peace Plaza
-                </Paragraph>
-                <Paragraph>Pickup: 100 KG 456 ST</Paragraph>
-              </Box>
-              <Box className="">
-                <Paragraph color={"$green10"}>Completed</Paragraph>
-              </Box>
-            </Box>
-
-            <Box className="flex-row items-center justify-between">
-              <Box>
-                <Paragraph size={"$5"} fontWeight={500}>
-                  Kimironko Market
-                </Paragraph>
-                <Paragraph>Pickup: Canalolympian</Paragraph>
-              </Box>
-              <Box className="">
-                <Paragraph color={"$green10"}>Completed</Paragraph>
-              </Box>
-            </Box>
-
-            <Box className="flex-row items-center justify-between">
-              <Box>
-                <Paragraph size={"$5"} fontWeight={500}>
-                  Makuza Peace Plaza
-                </Paragraph>
-                <Paragraph>Pickup: 100 KG 456 ST</Paragraph>
-              </Box>
-              <Box className="">
-                <Paragraph color={"$green10"}>Completed</Paragraph>
-              </Box>
-            </Box>
-
-            <Box className="flex-row items-center justify-between">
-              <Box>
-                <Paragraph size={"$5"} fontWeight={500}>
-                  KG 245 St
-                </Paragraph>
-                <Paragraph>Pickup: Amohoro Stadium</Paragraph>
-              </Box>
-              <Box className="">
-                <Paragraph color={"$red10"}>Cancelled</Paragraph>
-              </Box>
-            </Box>
+              );
+            })}
           </Box>
         </Box>
       </ScrollView>

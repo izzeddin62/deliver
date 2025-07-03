@@ -21,10 +21,13 @@ export const riderAssignment = query({
       };
 
     const deliveryRequest = await ctx.db.get(riderAssignment.deliveryRequestId);
+    const requester = deliveryRequest ? await ctx.db.get(deliveryRequest.userId) : null;
+
 
     return {
       riderAssignment: riderAssignment,
       deliveryRequest: deliveryRequest,
+      requester
     };
   },
 });

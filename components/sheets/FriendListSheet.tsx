@@ -18,9 +18,9 @@ interface FriendListSheetProps {
 
 const FriendListSheet = forwardRef<BottomSheet, FriendListSheetProps>(
   ({ friends, onClose }, ref) => {
-     const createLocationRequest = useMutation(
-        api.lib.mutations.friends.createFriendLocationRequest
-      );
+    const createLocationRequest = useMutation(
+      api.lib.mutations.friends.createFriendLocationRequest
+    );
     return (
       <BottomSheet
         ref={ref}
@@ -42,9 +42,9 @@ const FriendListSheet = forwardRef<BottomSheet, FriendListSheetProps>(
               <Pressable
                 key={friend._id}
                 onPress={async () => {
-                    await createLocationRequest({ friendId: friend._id });
-                    onClose?.();
-                  }}
+                  await createLocationRequest({ friendId: friend._id });
+                  onClose?.();
+                }}
                 className="flex-row items-center gap-2 active:bg-secondary-100"
               >
                 <Box className="p-2.5 bg-[#f1f2f4] rounded-full">
@@ -52,9 +52,6 @@ const FriendListSheet = forwardRef<BottomSheet, FriendListSheetProps>(
                 </Box>
                 <Box>
                   <Text className="font-semibold">{friend.email}</Text>
-                  {/* <Paragraph color={"$accent10"}>
-                  Added on {new Date(friend._creationTime).toLocaleDateString()}
-                </Paragraph> */}
                 </Box>
               </Pressable>
             ))}

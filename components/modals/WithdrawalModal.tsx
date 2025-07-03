@@ -1,19 +1,18 @@
 import { Heading } from "@/components/ui/heading";
 import { CloseIcon, Icon } from "@/components/ui/icon";
 import {
-    Modal,
-    ModalBackdrop,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { Fragment, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Label } from "tamagui";
 import { z } from "zod";
 import DInput from "../DInput";
 import { Box } from "../ui/box";
@@ -23,6 +22,7 @@ import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
 import { ChevronRight, Wallet2 } from "lucide-react-native";
 import { Pressable } from "react-native";
+import { Button, ButtonText } from "../ui/button";
 import { Toast, ToastDescription, ToastTitle, useToast } from "../ui/toast";
 
 const schema = z.object({
@@ -71,7 +71,6 @@ export default function WithdrawalModal() {
     }
   };
 
-
   return (
     <Fragment>
       <Pressable
@@ -103,10 +102,10 @@ export default function WithdrawalModal() {
         size="md"
       >
         <ModalBackdrop />
-        <ModalContent>
+        <ModalContent className="rounded-[24px] w-[90%]">
           <ModalHeader>
             <Heading size="md" className="text-typography-950">
-              Mobile Money
+             Money  withdraw
             </Heading>
             <ModalCloseButton>
               <Icon
@@ -124,9 +123,6 @@ export default function WithdrawalModal() {
 
             <Box className="mt-4 gap-4">
               <Box key="mobile-money-number">
-                <Label marginBlockEnd={8} size={"$4"} lineHeight={18}>
-                  Mobile money number
-                </Label>
                 <Controller
                   control={control}
                   defaultValue=""
@@ -143,9 +139,6 @@ export default function WithdrawalModal() {
                 />
               </Box>
               <Box key="contact-number">
-                <Label marginBlockEnd={8} size={"$4"} lineHeight={18}>
-                  Amout
-                </Label>
                 <Controller
                   control={control}
                   defaultValue={100}
@@ -165,18 +158,15 @@ export default function WithdrawalModal() {
           </ModalBody>
           <ModalFooter>
             <Button
+              action="secondary"
               onPress={() => {
                 setShowModal(false);
               }}
             >
-              Cancel
+              <ButtonText>Cancel</ButtonText>
             </Button>
-            <Button
-              theme={"black"}
-              className="ml-0"
-              onPress={handleSubmit(withdrawMoney)}
-            >
-              withdraw
+            <Button className="ml-0" onPress={handleSubmit(withdrawMoney)}>
+              <ButtonText>withdraw</ButtonText>
             </Button>
           </ModalFooter>
         </ModalContent>

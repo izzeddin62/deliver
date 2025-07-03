@@ -100,7 +100,7 @@ export default function RootLayout() {
                 ></Stack.Screen>
                 <Stack.Screen name="+not-found" />
               </Stack>
-              <StatusBar style="inverted" />
+              <StatusBar style="auto" />
             </ThemeProvider>
           </GluestackUIProvider>
         </TamaguiProvider>

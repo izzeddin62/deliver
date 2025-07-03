@@ -1,10 +1,12 @@
 import { Box } from "@/components/ui/box";
+import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
 import { UPLoading } from "@/components/UPLoader";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { Redirect } from "expo-router";
 import QRCode from "react-native-qrcode-svg";
-import { H5, Paragraph } from "tamagui";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function QrCode() {
   const currentUser = useQuery(api.lib.queries.users.currentUser);
@@ -26,22 +28,23 @@ export default function QrCode() {
   }
 
   return (
-    <Box className="items-center w-full flex-1 bg-white pt-10">
-      <Box className="w-full items-center mb-6">
-        <Paragraph text={"center"} size={"$7"}>
-          Scan this code
-        </Paragraph>
-        <H5 text={"center"} fontWeight={500}>
-          {user.email}
-        </H5>
+    <SafeAreaView className="flex-1 bg-white">
+      <Box className="items-center w-full flex-1 justify-center bg-white pt-10">
+        <QRCode
+          value={user._id}
+          size={300}
+          color="black"
+          backgroundColor="white"
+        />
+        <Box className="w-full items-center mb-6 mt-5">
+          <Text size="xl" className="text-center">
+            Scan this code
+          </Text>
+          <Heading className="font-semibold" size="xl">
+            {user.email}
+          </Heading>
+        </Box>
       </Box>
-
-      <QRCode
-        value={user._id}
-        size={200}
-        color="black"
-        backgroundColor="white"
-      />
-    </Box>
+    </SafeAreaView>
   );
 }

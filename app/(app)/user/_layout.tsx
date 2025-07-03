@@ -1,212 +1,36 @@
-import { Box } from "@/components/ui/box";
-import { ButtonText, Button as GButton } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerBackdrop,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-} from "@/components/ui/drawer";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { Stack, useRouter } from "expo-router";
-import { Bike, Map, Menu, X } from "lucide-react-native";
-import { Fragment, useState } from "react";
-import { Button, ListItem, Text } from "tamagui";
+import TabButton from "@/components/TabButton";
+import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
+import { Contact, House, Package2, User } from "lucide-react-native";
 
 export default function Layout() {
-  const [showDrawer, setShowDrawer] = useState(false);
-  const { signOut } = useAuthActions();
-  const router = useRouter();
-
   return (
-    <Fragment>
-      <Drawer
-        isOpen={showDrawer}
-        onClose={() => {
-          setShowDrawer(false);
-        }}
-        size="lg"
-        anchor="right"
-      >
-        <DrawerBackdrop />
-        <DrawerContent>
-          <DrawerHeader className="flex-row justify-end mt-6">
-            <DrawerCloseButton>
-              <X />
-            </DrawerCloseButton>
-          </DrawerHeader>
-          <DrawerBody>
-            <Box className="gap-3">
-              <Button
-                onPress={() => {
-                  router.navigate("/user");
-                  setShowDrawer(false);
-                }}
-              >
-                <ListItem hoverTheme icon={Map} scaleIcon={1.5}>
-                  Home
-                </ListItem>
-              </Button>
-              <Button
-                onPress={() => {
-                  router.replace("/user/deliveries");
-                  setShowDrawer(false);
-                }}
-              >
-                <ListItem hoverTheme icon={Bike} scaleIcon={1.5}>
-                  My deliveries
-                </ListItem>
-              </Button>
-              <Button
-                onPress={() => {
-                  router.replace("/user/qr-code");
-                  setShowDrawer(false);
-                }}
-              >
-                <ListItem hoverTheme icon={Bike} scaleIcon={1.5}>
-                  My QR code
-                </ListItem>
-              </Button>
-              <Button
-                onPress={() => {
-                  router.replace("/user/friends");
-                  setShowDrawer(false);
-                }}
-              >
-                <ListItem hoverTheme icon={Bike} scaleIcon={1.5}>
-                  My friends
-                </ListItem>
-              </Button>
-            </Box>
-          </DrawerBody>
-          <DrawerFooter>
-            <Button
-              onPress={async (e) => {
-                e.preventDefault();
-                await signOut();
-                setShowDrawer(false);
-                router.navigate("/");
-              }}
-              className="flex-1"
-            >
-              Logout
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+    <Tabs className="rounded-t-[20px]">
+      <TabSlot />
+      <TabList className="bg-background-0 h-24 justify-normal items-center">
+        <TabTrigger name="home" href="/" asChild>
+          <TabButton text="Home" Icon={House} />
+        </TabTrigger>
+        <TabTrigger name="deliveries" href="/(app)/user/deliveries" asChild>
+          <TabButton text="deliveries" Icon={Package2} />
+        </TabTrigger>
+        <TabTrigger name="friends" href="/(app)/user/friends" asChild>
+          <TabButton text="Friends" Icon={Contact} />
+        </TabTrigger>
+        <TabTrigger name="profile" href={"/(app)/user/profile"} asChild>
+          <TabButton text="Profile" Icon={User} />
+        </TabTrigger>
 
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerStyle: { backgroundColor: "#333333" },
-            title: "",
-            headerRight: () => (
-              <Box>
-                <GButton
-                  variant="link"
-                  className="w-fit"
-                  onPress={() => setShowDrawer(true)}
-                >
-                  <ButtonText>
-                    <Menu color={"white"} />
-                  </ButtonText>
-                </GButton>
-              </Box>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="deliveries"
-          options={{
-            headerTitle: () => <Text fontWeight={500}>Deliveries</Text>,
-            headerRight: () => (
-              <Box>
-                <GButton
-                  variant="link"
-                  className="w-fit"
-                  onPress={() => setShowDrawer(true)}
-                >
-                  <ButtonText>
-                    <Menu />
-                  </ButtonText>
-                </GButton>
-              </Box>
-            ),
-          }}
-        />
-
-        <Stack.Screen
-          name="delivery"
-          options={{
-            headerTitle: () => <Text fontWeight={500}>Delivery</Text>,
-            headerRight: () => (
-              <Box>
-                <GButton
-                  variant="link"
-                  className="w-fit"
-                  onPress={() => setShowDrawer(true)}
-                >
-                  <ButtonText>
-                    <Menu />
-                  </ButtonText>
-                </GButton>
-              </Box>
-            ),
-          }}
-        />
-    
-        <Stack.Screen
-          name="qr-code"
-          options={{
-            headerStyle: { backgroundColor: "#333333" },
-            headerTitle: () => (
-              <Text fontWeight={500} color={"white"}>
-                QR Code
-              </Text>
-            ),
-            headerRight: () => (
-              <Box>
-                <GButton
-                  variant="link"
-                  className="w-fit"
-                  onPress={() => setShowDrawer(true)}
-                >
-                  <ButtonText>
-                    <Menu color={"white"} />
-                  </ButtonText>
-                </GButton>
-              </Box>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="friends"
-          options={{
-            headerStyle: { backgroundColor: "#333333" },
-            headerTitle: () => (
-              <Text fontWeight={500} color={"white"}>
-                Friends
-              </Text>
-            ),
-            headerRight: () => (
-              <Box>
-                <GButton
-                  variant="link"
-                  className="w-fit"
-                  onPress={() => setShowDrawer(true)}
-                >
-                  <ButtonText>
-                    <Menu color={"white"} />
-                  </ButtonText>
-                </GButton>
-              </Box>
-            ),
-          }}
-        />
-      </Stack>
-    </Fragment>
+        <TabTrigger
+          name="profile"
+          href={"/(app)/user/qr-code"}
+          className="hidden"
+        ></TabTrigger>
+        <TabTrigger
+          name="profile"
+          href={"/(app)/user/scanner"}
+          className="hidden"
+        ></TabTrigger>
+      </TabList>
+    </Tabs>
   );
 }

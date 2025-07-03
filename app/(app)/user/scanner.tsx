@@ -175,9 +175,9 @@ const styles = StyleSheet.create({
   },
   shutterContainer: {
     position: "absolute",
-    top: 16,
+    top: 24,
     left: 0,
-    right: 0,
+    right: 16,
     width: "100%",
     alignItems: "center",
     flexDirection: "row",

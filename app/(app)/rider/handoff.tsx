@@ -1,4 +1,5 @@
 import { Box } from "@/components/ui/box";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import {
   Toast,
   ToastDescription,
@@ -20,7 +21,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { Button, Spinner } from "tamagui";
 
 export default function Handoff() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -73,7 +73,7 @@ export default function Handoff() {
         image: storageId,
       });
       setIsLoading(false);
-      router.navigate("/(app)/rider")
+      router.navigate("/(app)/rider");
       toast.show({
         placement: "top",
         duration: 2000,
@@ -139,12 +139,11 @@ export default function Handoff() {
         <Box className=" w-full  px-5 py-10">
           <RButton onPress={() => setUri(null)} title="Take another picture" />
 
-          <Button
-            theme={"black"}
-            onPress={handoff}
-            icon={isLoading ? <Spinner /> : null}
-          >
-            {isLoading ? "Finishing handoff..." : "Finish Handoff"}
+          <Button size="xl" onPress={handoff}>
+            {isLoading && <ButtonSpinner />}
+            <ButtonText className="ml-1">
+              {isLoading ? "Finishing handoff..." : "Finish Handoff"}
+            </ButtonText>
           </Button>
         </Box>
       </Box>
