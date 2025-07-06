@@ -4,6 +4,27 @@ This is the github [repository](https://github.com/izzeddin62/deliver) for the p
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+To test the application, you will need the **Expo Go** application. You can download it on the App Store or the Google Play Store. After adding **Expo Go**, use the following links to access the application:
+- [Android test link](https://expo.dev/accounts/izzeddin/projects/deliver/fingerprints/b8849183cd49bbc1f94adeb6e101c52e09aa2af9)
+- [IOS test link](https://expo.dev/accounts/izzeddin/projects/deliver/fingerprints/b153b98f662b0f1ba58dabf206507b5bec459706)
+
+Or scan the QR code below to access the application(You will still need the **Expo Go** app)
+
+<img width="285" alt="Screenshot 2025-07-06 at 23 25 37" src="https://github.com/user-attachments/assets/7c441181-a630-4312-8247-233e0d963621" />
+
+**N.B**: The application loading might fail in expo go so please try again if it happens the first time.
+
+## Test result and screenshot
+
+[Test result doc](https://docs.google.com/document/d/1PyAN0rZIowtF1Nb8HDw_KNJ-o1q83o7IUIbsNoIg1Fg/edit?usp=sharing)
+
+## Application objective discussion and analysis
+[discussion and analysis doc](https://docs.google.com/document/d/1lF5rKIU5zHMUmjJcfpD7pe7DPP9KkI6JyHC3XZ0ZP_o/edit?usp=sharing)
+
+
+### Application video Demo
+[youtube video](https://youtu.be/vgg2aiYkI20)
+
 ## Get started
 
 1. Install dependencies
