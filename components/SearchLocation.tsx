@@ -7,7 +7,7 @@ import {
   Check,
   ChevronLeft,
   Loader,
-  MapPin,
+  LocationEdit,
   Search,
 } from "lucide-react-native";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -21,9 +21,8 @@ import {
 } from "react-native";
 import { UPInputProps, UPInputSearch } from "./UPInput";
 import { UPLoading } from "./UPLoader";
-import UPText from "./UPText";
 import { Box } from "./ui/box";
-import { Input, InputField } from "./ui/input";
+import { Heading } from "./ui/heading";
 import { Text } from "./ui/text";
 
 type UPInputLocationProps = UPInputProps & {
@@ -129,9 +128,11 @@ function UPInputLocationModel({
     })
   );
 
+  console.log(places?.[0]?.address_components?.[0], "=======");
+
   return (
-    <Modal visible={modelVisible} animationType="slide" transparent={true}>
-      <View className="flex flex-col gap-2 items-center h-full bg-white rounded-xl">
+    <Modal visible={modelVisible} animationType="slide" transparent={true} className="">
+      <View className="flex flex-col gap-2 items-center h-full bg-white pt-5 rounded-xl">
         <View className="flex items-center justify-between w-full flex-row pt-[54px]">
           <Pressable
             onPress={() => {
@@ -148,14 +149,14 @@ function UPInputLocationModel({
             />
           </Pressable>
           <View>
-            <UPText variant="h4" className="text-primary capitalize">
+            <Heading  className="text-primary capitalize font-medium">
               Select Location
-            </UPText>
+            </Heading>
           </View>
 
           <View className="w-10" />
         </View>
-        <UPRootLayoutModelContent className="w-full" isTopPadding={false}>
+        <UPRootLayoutModelContent className="w-full pt-4" isTopPadding={false}>
           <UPInputSearch
             value={search}
             isLoading={isLoadingPlaces}
@@ -163,19 +164,13 @@ function UPInputLocationModel({
             className="mt-2"
             autoFocus
           />
-          <Box className="relative bg-background-50 pt-6 rounded-sm pb-1">
-            <Text className="absolute top-2 left-2.5 text-sm font-semibold text-typography-400 border-0">To</Text>
-            <Input className="bg-transparent relative border-0">
-              <InputField placeholder="Destination" />
-            </Input>
-          </Box>
 
           {isLoadingPlaces ? (
             <View className="mt-4">
               <UPLoading />
             </View>
           ) : (
-            <View className="w-full">
+            <View className="w-full mt-8">
               <FlatList
                 data={places ?? []}
                 style={{
@@ -188,18 +183,30 @@ function UPInputLocationModel({
                   <Pressable
                     onPress={() => {
                       setModelVisible(false);
+
                       onChange?.({ ...item });
                     }}
-                    className="px-4 w-full py-4 border-b border-border flex flex-row justify-between"
+                    className="px-- w-full py-4 flex flex-row justify-between"
                   >
-                    <View className="flex items-center flex-row gap-2">
-                      <MapPin size={18} color={Colors.UP.primary} />
-                      <UPText
-                        variant="body2"
-                        className="text-primary capitalize"
-                      >
-                        {item.formatted_address}
-                      </UPText>
+                    <View className="flex items-start flex-row gap-4 w-full ">
+                      <Box className="p-3 bg-secondary-200 rounded-full relative top-1">
+                        <LocationEdit size={20} color={"#666666"} />
+                      </Box>
+                      <Box className="flex-1  border-b border-b-background-200 pb-4">
+                        <Heading
+                          // variant="body2"
+
+                          className="text-primary capitalize text-base font-semibold"
+                        >
+                          {item.address_components?.[0]?.short_name}
+                        </Heading>
+                        <Text
+                          // variant="body2"
+                          className="text-primary text-sm text-typography-600"
+                        >
+                          {item.address_components?.[0]?.long_name}
+                        </Text>
+                      </Box>
                     </View>
 
                     {value === item.formatted_address && (

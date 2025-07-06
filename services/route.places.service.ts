@@ -17,7 +17,7 @@ export interface ComputeRoutesRequest {
   routingPreference?: "TRAFFIC_AWARE" | "UNRESTRICTED";
   polylineQuality?: "HIGH_QUALITY" | "OVERVIEW";
   polylineEncoding?: "ENCODED_POLYLINE";
-  intermediates?: Waypoint[]
+  intermediates?: Waypoint[];
 }
 export interface Route {
   duration: string;

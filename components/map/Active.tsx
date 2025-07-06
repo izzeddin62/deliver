@@ -14,9 +14,9 @@ import { useQuery } from "convex/react";
 import duration from "dayjs/plugin/duration";
 import * as Location from "expo-location";
 import { Redirect } from "expo-router";
-import { BikeIcon } from "lucide-react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
+import MotoTaxiMarker from "../markers/MotoTaxiMarker";
 import DeliveryProgressSheet from "../sheets/DeliveryProgressSheet";
 import HandoffSheet from "../sheets/HandoffSheet";
 import WaitingRiderSheet from "../sheets/WaitingRiderSheet";
@@ -119,16 +119,21 @@ export default function ActiveDelivery() {
               )}
 
               {rider && rider.location && delivery.status === "delivering" && (
-                <Marker
-                  coordinate={{
-                    longitude: rider.location.longitude,
-                    latitude: rider.location.latitude,
-                  }}
-                  title="Rider Location"
-                  pinColor="#0da6f2"
-                >
-                  <BikeIcon size={24} color="#0da6f2" />
-                </Marker>
+                // <Marker
+                //   coordinate={{
+                //     longitude: rider.location.longitude,
+                //     latitude: rider.location.latitude,
+                //   }}
+                //   title="Rider Location"
+                //   pinColor="#0da6f2"
+                // >
+                //   <BikeIcon size={24} color="#0da6f2" />
+                // </Marker>
+
+                <MotoTaxiMarker coordinate={{
+                  longitude: rider.location.longitude,
+                  latitude: rider.location.latitude,
+                }} />
               )}
 
               {coords && (

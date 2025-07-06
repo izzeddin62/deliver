@@ -17,7 +17,7 @@ export function useComputeRoutes(
       fetchComputedRoutes({
         origin: { location: { latLng: origin! } },
         destination: { location: { latLng: destination! } },
-        intermediates: waypoints?.map(el => ({ location: { latLng: el}})),
+        intermediates: waypoints?.map(el => ({ location: { latLng: el }})),
         travelMode: "DRIVE",
         routingPreference: "TRAFFIC_AWARE",
         polylineQuality: "HIGH_QUALITY",

@@ -34,18 +34,19 @@ export const requestPayment = internalAction({
     console.log(paypack, "===== paypack");
     console.log(paypack.cashin);
     try {
-      const { data } = await paypack.cashin({
-        amount: 100,
-        number: "0784088507",
-        environment: "development",
-      });
+      if (deliveryRequest.phoneNumber && deliveryRequest.price) {
+        const { data } = await paypack.cashin({
+          amount: deliveryRequest.price,
+          number: deliveryRequest.phoneNumber,
+          environment: "development",
+        });
+        console.log(data, "the payment data I received");
 
-      console.log(data, "the payment data I received");
-
-      await ctx.runMutation(internal.lib.mutations.payments.createPayment, {
-        deliveryRequestId: args.deliveryRequestId,
-        ref: data.ref,
-      });
+        await ctx.runMutation(internal.lib.mutations.payments.createPayment, {
+          deliveryRequestId: args.deliveryRequestId,
+          ref: data.ref,
+        });
+      }
     } catch (error) {
       console.log(error, "======");
       if (error instanceof AxiosError) {
@@ -92,7 +93,7 @@ export const verifyPayment = internalAction({
 
 export const withdrawalPayment = internalAction({
   args: {
-   amount: v.number(),
+    amount: v.number(),
     phoneNumber: v.string(),
     riderId: v.id("users"),
   },
@@ -108,15 +109,12 @@ export const withdrawalPayment = internalAction({
 
     console.log(data, "the withdrawal data I received");
 
-    await ctx.runMutation(
-      internal.lib.mutations.withdrawals.createWithdrawal,
-      {
-        amount,
-        phoneNumber,
-        riderId,
-        ref: data.ref,
-      }
-    );
+    await ctx.runMutation(internal.lib.mutations.withdrawals.createWithdrawal, {
+      amount,
+      phoneNumber,
+      riderId,
+      ref: data.ref,
+    });
 
     return { success: true };
   },

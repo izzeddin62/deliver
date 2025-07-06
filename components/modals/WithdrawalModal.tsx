@@ -105,7 +105,7 @@ export default function WithdrawalModal() {
         <ModalContent className="rounded-[24px] w-[90%]">
           <ModalHeader>
             <Heading size="md" className="text-typography-950">
-             Money  withdraw
+              Money withdraw
             </Heading>
             <ModalCloseButton>
               <Icon
@@ -141,16 +141,19 @@ export default function WithdrawalModal() {
               <Box key="contact-number">
                 <Controller
                   control={control}
-                  defaultValue={100}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <DInput
-                      placeholder="Amount"
-                      onBlur={onBlur}
-                      onChange={(value) => onChange(parseInt(value))}
-                      value={String(value)}
-                      error={errors.amount?.message}
-                    />
-                  )}
+                  defaultValue={1000}
+                  render={({ field: { onChange, onBlur, value } }) => {
+                    console.log(value, '====value')
+                    return (
+                      <DInput
+                        placeholder="Amount"
+                        onBlur={onBlur}
+                        onChange={(value) => onChange(value ? parseInt(value) : 0)}
+                        value={String(value)}
+                        error={errors.amount?.message}
+                      />
+                    );
+                  }}
                   name="amount"
                 />
               </Box>

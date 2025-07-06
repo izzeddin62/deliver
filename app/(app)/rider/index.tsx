@@ -27,14 +27,29 @@ export default function UserMapScreen() {
   const deliveryInfo = useQuery(
     api.lib.queries.riderAssignment.riderAssignment
   );
-  const { data } = useComputeRoutes(
-    currentMarker,
+  const { data, isPending } = useComputeRoutes(
+    deliveryInfo?.deliveryRequest?.status === "delivering"
+      ? {
+          latitude: deliveryInfo.deliveryRequest.pickup.latitude,
+          longitude: deliveryInfo.deliveryRequest.pickup.longitude,
+        }
+      : currentMarker,
     deliveryInfo?.deliveryRequest?.destination
-      ? deliveryInfo?.deliveryRequest?.destination
+      ? {
+          longitude: deliveryInfo?.deliveryRequest?.destination.longitude,
+          latitude: deliveryInfo?.deliveryRequest?.destination.latitude,
+        }
       : null,
-    deliveryInfo?.deliveryRequest?.pickup
-      ? [deliveryInfo?.deliveryRequest?.pickup]
-      : []
+    deliveryInfo?.deliveryRequest?.status === "delivering"
+      ? []
+      : deliveryInfo?.deliveryRequest?.pickup
+        ? [
+            {
+              longitude: deliveryInfo?.deliveryRequest?.pickup.longitude,
+              latitude: deliveryInfo.deliveryRequest.pickup.latitude,
+            },
+          ]
+        : []
   );
 
   // ——— EFFECT TO REQUEST LOCATION PERMISSION + GET CURRENT POSITION ———
@@ -64,11 +79,12 @@ export default function UserMapScreen() {
     })();
   }, []);
 
-  const coords = data?.routes?.[0]
-    ? polyline
-        .decode(data.routes[0].polyline.encodedPolyline)
-        .map(([lat, lng]) => ({ latitude: lat, longitude: lng }))
-    : null;
+  const coords =
+    data?.routes?.[0] && data.routes[0]?.polyline?.encodedPolyline
+      ? polyline
+          .decode(data.routes[0].polyline.encodedPolyline)
+          .map(([lat, lng]) => ({ latitude: lat, longitude: lng }))
+      : null;
 
   if (deliveryInfo === null) {
     return <Redirect href={"/login"} />;
@@ -97,51 +113,116 @@ export default function UserMapScreen() {
   const isDeliveryRequestActive =
     deliveryInfo.deliveryRequest?.status !== "done";
 
+  console.log(coords?.length, "==== rider route coords");
+
+  console.log({ hello: "56" });
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="flex-1">
         <Box className="flex-1">
-          {initialRegion && (
+          {initialRegion && (isPending || !data) && (
             <MapView
               style={StyleSheet.absoluteFillObject}
               initialRegion={currentRegion ?? initialRegion}
               showsUserLocation={true}
               loadingEnabled
               region={currentRegion ?? initialRegion}
-            >
-              {deliveryInfo.deliveryRequest?.pickup &&
-                deliveryInfo.deliveryRequest.status !== "done" && (
-                  <Marker
-                    coordinate={{
-                      latitude: deliveryInfo.deliveryRequest.pickup.latitude,
-                      longitude: deliveryInfo.deliveryRequest.pickup.longitude,
-                    }}
-                    title="Destination"
-                  />
-                )}
+            ></MapView>
+          )}
+          {initialRegion &&
+            deliveryRequest?.status === "inTransit" &&
+            coords && (
+              <MapView
+                style={StyleSheet.absoluteFillObject}
+                initialRegion={currentRegion ?? initialRegion}
+                showsUserLocation={true}
+                loadingEnabled
+                region={currentRegion ?? initialRegion}
+              >
+                {deliveryInfo.deliveryRequest?.pickup &&
+                  deliveryInfo.deliveryRequest.status !== "done" && (
+                    <Marker
+                      coordinate={{
+                        latitude: deliveryInfo.deliveryRequest.pickup.latitude,
+                        longitude:
+                          deliveryInfo.deliveryRequest.pickup.longitude,
+                      }}
+                      title="Destination"
+                    />
+                  )}
 
-              {deliveryInfo.deliveryRequest?.destination &&
-                deliveryInfo.deliveryRequest.status !== "done" && (
-                  <Marker
-                    coordinate={{
-                      latitude:
-                        deliveryInfo.deliveryRequest.destination.latitude,
-                      longitude:
-                        deliveryInfo.deliveryRequest.destination.longitude,
-                    }}
-                    title="Destination"
-                  />
-                )}
+                {deliveryInfo.deliveryRequest?.destination &&
+                  coords &&
+                  deliveryInfo.deliveryRequest.status !== "done" && (
+                    <Marker
+                      coordinate={{
+                        latitude:
+                          deliveryInfo.deliveryRequest.destination.latitude,
+                        longitude:
+                          deliveryInfo.deliveryRequest.destination.longitude,
+                      }}
+                      title="Destination"
+                    />
+                  )}
 
-              {coords && (
                 <Polyline
-                  coordinates={coords}
+                  key={coords
+                    .map((c) => `${c.latitude},${c.longitude}`)
+                    .join(";")}
+                  coordinates={coords.slice(5)}
                   strokeColor="#0da6f2"
                   strokeWidth={6}
                 />
-              )}
-            </MapView>
-          )}
+              </MapView>
+            )}
+
+          {initialRegion &&
+            deliveryRequest?.status === "delivering" &&
+            coords && (
+              <MapView
+                style={StyleSheet.absoluteFillObject}
+                initialRegion={currentRegion ?? initialRegion}
+                showsUserLocation={true}
+                loadingEnabled
+                region={currentRegion ?? initialRegion}
+              >
+                {deliveryInfo.deliveryRequest?.pickup &&
+                  deliveryInfo.deliveryRequest.status !== "done" && (
+                    <Marker
+                      coordinate={{
+                        latitude: deliveryInfo.deliveryRequest.pickup.latitude,
+                        longitude:
+                          deliveryInfo.deliveryRequest.pickup.longitude,
+                      }}
+                      title="Destination"
+                    />
+                  )}
+
+                {deliveryInfo.deliveryRequest?.destination &&
+                  coords &&
+                  deliveryInfo.deliveryRequest.status !== "done" && (
+                    <Marker
+                      coordinate={{
+                        latitude:
+                          deliveryInfo.deliveryRequest.destination.latitude,
+                        longitude:
+                          deliveryInfo.deliveryRequest.destination.longitude,
+                      }}
+                      title="Destination"
+                    />
+                  )}
+
+                <Polyline
+                  key={coords
+                    .map((c) => `${c.latitude},${c.longitude}`)
+                    .join(";")}
+                  coordinates={coords.slice(5)}
+                  strokeColor="#0da6f2"
+                  strokeWidth={6}
+                />
+              </MapView>
+            )}
 
           {/* ===== MAPVIEW ===== */}
         </Box>

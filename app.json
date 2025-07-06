@@ -13,7 +13,10 @@
       "config": {
         "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
       },
-      "bundleIdentifier": "com.theownersforum.deliver"
+      "bundleIdentifier": "com.theownersforum.deliver",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +28,14 @@
         "googleMaps": {
           "apiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
         }
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.deliver.deliver"
     },
     "web": {
       "bundler": "metro",
@@ -54,6 +64,19 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4a917d6a-b5db-4733-9180-5a953f518c79"
+      }
+    },
+    "owner": "izzeddin",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4a917d6a-b5db-4733-9180-5a953f518c79"
     }
   }
 }
